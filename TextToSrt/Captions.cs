@@ -16,13 +16,22 @@ namespace TextToSrt
 
         public static Captions Parse(string[] text, TimeSpan clipDuration)
         {
-            IEnumerable<string> lines = Cleanup(text).ToList();
+            IEnumerable<string> lines = BreakLongLines(
+                BreakIntoSentences(Cleanup(text)),
+                95, 45).ToList();
             TextDurationMeter durationMeter = new TextDurationMeter(lines, clipDuration);
             IEnumerable<CaptionLine> captions = lines
                 .Select(line => (text: line, duration: durationMeter.EstimateDuration(line)))
                 .Select(tuple => new CaptionLine(tuple.text, tuple.duration));
             return new Captions(captions);
         }
+
+        private static IEnumerable<string> BreakLongLines(
+            IEnumerable<string> text, int maxLineCharacters, int minBrokenLength) =>
+            new LinesBreaker().BreakLongLines(text, maxLineCharacters, minBrokenLength);
+
+        private static IEnumerable<string> BreakIntoSentences(IEnumerable<string> text) =>
+            new SentenceRules().Split(text);
 
         private static IEnumerable<string> Cleanup(string[] text) =>
             text
