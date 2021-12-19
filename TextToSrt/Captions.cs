@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace TextToSrt
 {
@@ -39,7 +40,7 @@ namespace TextToSrt
                 .Where(line => line.Length > 0);
 
         public void SaveAsStr(FileInfo destination) =>
-            File.WriteAllLines(destination.FullName, this.GenerateSrtFileContent());
+            File.WriteAllLines(destination.FullName, this.GenerateSrtFileContent(), Encoding.UTF8);
 
         private IEnumerable<string> GenerateSrtFileContent() =>
             GenerateLineBoundaries()
