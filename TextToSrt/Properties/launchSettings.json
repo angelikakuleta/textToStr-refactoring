@@ -1,7 +1,9 @@
 {
   "profiles": {
     "TextToSrt": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "script.txt output.str 00:05:30",
+      "workingDirectory": "..\\data"
     }
   }
 }
