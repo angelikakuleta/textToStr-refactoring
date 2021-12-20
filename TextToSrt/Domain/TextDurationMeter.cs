@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace TextToSrt
+namespace SubtitlesConverter.Domain
 {
     internal class TextDurationMeter
     {
@@ -12,18 +12,18 @@ namespace TextToSrt
 
         public TextDurationMeter(IEnumerable<string> fullText, TimeSpan clipDuration)
         {
-            this.FullTextLength = fullText.Sum(this.CountRaedableLetters);
-            this.FullTextDuration = clipDuration;
+            FullTextLength = fullText.Sum(CountRaedableLetters);
+            FullTextDuration = clipDuration;
         }
 
         public TimeSpan EstimateDuration(string text) =>
-            TimeSpan.FromMilliseconds(this.EstimateMilliseconds(text));
+            TimeSpan.FromMilliseconds(EstimateMilliseconds(text));
 
         private double EstimateMilliseconds(string text) =>
-            this.FullTextDuration.TotalMilliseconds * this.GetRelativeLength(text);
+            FullTextDuration.TotalMilliseconds * GetRelativeLength(text);
 
         private double GetRelativeLength(string text) =>
-            this.CountRaedableLetters(text) / this.FullTextLength;
+            CountRaedableLetters(text) / FullTextLength;
 
         private int CountRaedableLetters(string text) =>
             Regex.Matches(text, @"w+").Sum(match => match.Value.Length);

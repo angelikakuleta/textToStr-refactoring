@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using SubtitlesConverter.Common;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace TextToSrt
+namespace SubtitlesConverter.Domain
 {
     class LinesBreaker
     {
@@ -32,11 +33,11 @@ namespace TextToSrt
             },
         };
 
-        public IEnumerable<string> BreakLongLines(
+        public IEnumerable<string> Break(
             IEnumerable<string> text, int maxLineCharacters, int minBrokenLength) =>
-            text.SelectMany(line => this.BreakLongLine(line, maxLineCharacters, minBrokenLength));
+            text.SelectMany(line => Break(line, maxLineCharacters, minBrokenLength));
 
-        public IEnumerable<string> BreakLongLine(string line, int maxLength, int minBrokenLength)
+        public IEnumerable<string> Break(string line, int maxLength, int minBrokenLength)
         {
             string remaining = line;
 
@@ -49,10 +50,10 @@ namespace TextToSrt
                 }
 
                 bool broken = false;
-                foreach ((string separator, string toLeft, string toRight)[] rules in this.Rules)
+                foreach ((string separator, string toLeft, string toRight)[] rules in Rules)
                 {
                     IEnumerable<(string left, string right)> split =
-                        this.TryBreakLongLine(remaining, rules, maxLength, minBrokenLength)
+                        TryBreakLongLine(remaining, rules, maxLength, minBrokenLength)
                             .ToList();
 
                     if (split.Any())
@@ -77,7 +78,7 @@ namespace TextToSrt
             string line,
             IEnumerable<(string separatorPattern, string appendLeft, string prependRight)> rules,
             int maxLength, int minBrokenLength) =>
-            rules.SelectMany(rule => this.BreakLongLine(line, rule, maxLength, minBrokenLength))
+            rules.SelectMany(rule => BreakLongLine(line, rule, maxLength, minBrokenLength))
                 .WithMinimumOrEmpty(split => maxLength - split.left.Length);
 
         private IEnumerable<(string left, string right)> BreakLongLine(

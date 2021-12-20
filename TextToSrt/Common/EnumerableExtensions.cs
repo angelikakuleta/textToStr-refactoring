@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TextToSrt
+namespace SubtitlesConverter.Common
 {
     public static class EnumerableExtensions
     {
