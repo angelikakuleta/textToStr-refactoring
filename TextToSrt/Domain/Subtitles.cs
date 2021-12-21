@@ -18,13 +18,12 @@ namespace SubtitlesConverter.Domain
 
         public static Subtitles Parse(string[] text, TimeSpan clipDuration)
         {
-            ITextProcessor cleanup = new LinesTrimmer();
-            ITextProcessor intoSentences = new SentencesBreaker();
-            ITextProcessor intoShortLines = new LinesBreaker(95, 45);
-
-            IEnumerable<string> lines = cleanup.Execute(text);
-            lines = intoSentences.Execute(lines);
-            lines = intoShortLines.Execute(lines).ToList();
+            ITextProcessor parsing = new Pipeline(
+                new LinesTrimmer(),
+                new SentencesBreaker(),
+                new LinesBreaker(95, 45));
+            
+            IEnumerable<string> lines = parsing.Execute(text).ToList();
 
             TextDurationMeter durationMeter = new TextDurationMeter(lines, clipDuration);
             IEnumerable<SubtitleLine> subtitles = lines
