@@ -10,3 +10,7 @@ Can be applied to implement an optional processing step. When a processing needs
 ## Composite pattern
 
 Wraps a linear structure of objects of the same kind into a single object which exposes the same interface. Requires a composition function which maps one call to many calls of the same kind.
+
+## Decorator pattern
+
+One object wraps another object with the same interface. Intercepts calls to methods and adds own behavior.

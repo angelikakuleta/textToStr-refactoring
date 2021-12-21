@@ -18,10 +18,10 @@ namespace SubtitlesConverter.Domain
 
         public static Subtitles Parse(string[] text, TimeSpan clipDuration)
         {
-            ITextProcessor parsing = new Pipeline(
-                new LinesTrimmer(),
-                new SentencesBreaker(),
-                new LinesBreaker(95, 45));
+            ITextProcessor parsing = 
+                new LinesTrimmer()
+                    .Then(new SentencesBreaker())
+                    .Then(new LinesBreaker(95, 45));
             
             IEnumerable<string> lines = parsing.Execute(text).ToList();
 
