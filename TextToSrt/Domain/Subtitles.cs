@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SubtitlesConverter.Domain.TextProcessing;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace SubtitlesConverter.Domain
 {
-    class Subtitles
+    class Subtitles : LinesTrimmer
     {
         private IEnumerable<SubtitleLine> Lines { get; }
 
@@ -17,27 +18,20 @@ namespace SubtitlesConverter.Domain
 
         public static Subtitles Parse(string[] text, TimeSpan clipDuration)
         {
-            IEnumerable<string> lines = BreakLongLines(
-                BreakIntoSentences(Cleanup(text)),
-                95, 45).ToList();
+            ITextProcessor cleanup = new LinesTrimmer();
+            ITextProcessor intoSentences = new SentencesBreaker();
+            ITextProcessor intoShortLines = new LinesBreaker(95, 45);
+
+            IEnumerable<string> lines = cleanup.Execute(text);
+            lines = intoSentences.Execute(lines);
+            lines = intoShortLines.Execute(lines).ToList();
+
             TextDurationMeter durationMeter = new TextDurationMeter(lines, clipDuration);
             IEnumerable<SubtitleLine> subtitles = lines
                 .Select(line => (text: line, duration: durationMeter.EstimateDuration(line)))
                 .Select(tuple => new SubtitleLine(tuple.text, tuple.duration));
             return new Subtitles(subtitles);
         }
-
-        private static IEnumerable<string> BreakLongLines(
-            IEnumerable<string> text, int maxLineCharacters, int minBrokenLength) =>
-            new LinesBreaker().Break(text, maxLineCharacters, minBrokenLength);
-
-        private static IEnumerable<string> BreakIntoSentences(IEnumerable<string> text) =>
-            new SentencesBreaker().Break(text);
-
-        private static IEnumerable<string> Cleanup(string[] text) =>
-            text
-                .Select(line => line.Trim())
-                .Where(line => line.Length > 0);
 
         public void SaveAsStr(FileInfo destination) =>
             File.WriteAllLines(destination.FullName, GenerateSrtFileContent(), Encoding.UTF8);
