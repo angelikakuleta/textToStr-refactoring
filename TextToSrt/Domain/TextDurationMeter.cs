@@ -7,25 +7,32 @@ namespace SubtitlesConverter.Domain
 {
     internal class TextDurationMeter
     {
-        private double FullTextLength { get; }
-        private TimeSpan FullTextDuration { get; }
+        private TimedText Text { get; }
 
-        public TextDurationMeter(IEnumerable<string> fullText, TimeSpan clipDuration)
+        public TextDurationMeter(TimedText text)
         {
-            FullTextLength = fullText.Sum(CountRaedableLetters);
-            FullTextDuration = clipDuration;
+            Text = text;
         }
 
-        public TimeSpan EstimateDuration(string text) =>
-            TimeSpan.FromMilliseconds(EstimateMilliseconds(text));
+        public IEnumerable<SubtitleLine> MeasureLines() =>
+            MeasureLines(GetFullTextWeight());
 
-        private double EstimateMilliseconds(string text) =>
-            FullTextDuration.TotalMilliseconds * GetRelativeLength(text);
+        public IEnumerable<SubtitleLine> MeasureLines(double fullTextWeight) =>
+            Text.Content
+                .Select(line => (
+                    line: line,
+                    relativeWeight: CountReadableLetters(line) / fullTextWeight))
+                .Select(tuple => (
+                    line: tuple.line,
+                    miliseconds: Text.Duration.TotalMilliseconds * tuple.relativeWeight))
+                .Select(tuple => new SubtitleLine(
+                    tuple.line,
+                    TimeSpan.FromMilliseconds(tuple.miliseconds)));
 
-        private double GetRelativeLength(string text) =>
-            CountRaedableLetters(text) / FullTextLength;
+        private double GetFullTextWeight() =>
+            Text.Content.Sum(CountReadableLetters);
 
-        private int CountRaedableLetters(string text) =>
+        private int CountReadableLetters(string text) =>
             Regex.Matches(text, @"w+").Sum(match => match.Value.Length);
     }
 }

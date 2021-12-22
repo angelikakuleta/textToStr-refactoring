@@ -26,7 +26,8 @@ namespace SubtitlesConverter.Presentation
             try
             {
                 string[] text = File.ReadAllLines(source.FullName);
-                Subtitles captions = Subtitles.Parse(text, clipDuration);
+                TimedText timed = new TimedText(text, clipDuration); // wrapped objects that always appears together
+                Subtitles captions = Subtitles.Parse(timed);
                 captions.SaveAsStr(destination);
             }
             catch (Exception ex)

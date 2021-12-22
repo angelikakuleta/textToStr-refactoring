@@ -1,3 +1,9 @@
+# Refactoring to Design Patterns
+
+Refactoring changes the design without changing observable behaviour.
+
+Redesign changes the design while observable behaviour may change. It can be performed in a series of small, focused and well-managed refactorings.
+
 ## Strategy pattern
 
 A strategy is an object, which exposes one function. It can be an abstract class or an interface. Concrete strategies can vary, but they must all implement the base. In that way, consumer of a strategy doesn't have to be bound to any concrete implementation.
