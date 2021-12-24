@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SubtitlesConverter.Domain
+namespace SubtitlesConverter.Domain.TextProcessing
 {
     interface ITextProcessor
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SubtitlesConverter.Domain
+namespace SubtitlesConverter.Domain.TextProcessing
 {
     class ChainedProcessor : ITextProcessor
     {
@@ -15,7 +15,7 @@ namespace SubtitlesConverter.Domain
         }
 
         public IEnumerable<string> Execute(IEnumerable<string> text) =>
-            Next.Execute(Inner.Execute(text));     
+            Next.Execute(Inner.Execute(text));
     }
 
     static class ChainConstruction

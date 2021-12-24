@@ -3,7 +3,9 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using SubtitlesConverter.Domain;
+using SubtitlesConverter.Domain.Models;
 using SubtitlesConverter.Domain.TextProcessing;
+using SubtitlesConverter.Domain.TextProcessing.Implementation;
 
 namespace SubtitlesConverter.Presentation
 {

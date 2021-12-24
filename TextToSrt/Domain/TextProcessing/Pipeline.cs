@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SubtitlesConverter.Domain.TextProcessing
 {
@@ -15,11 +13,11 @@ namespace SubtitlesConverter.Domain.TextProcessing
         }
 
         public Pipeline(params ITextProcessor[] processors)
-            : this((IEnumerable<ITextProcessor>) processors)
+            : this((IEnumerable<ITextProcessor>)processors)
         {
         }
 
         public IEnumerable<string> Execute(IEnumerable<string> text) =>
-            this.Processors.Aggregate(text, (current, processor) => processor.Execute(current)); // chain of calls
+            Processors.Aggregate(text, (current, processor) => processor.Execute(current)); // chain of calls
     }
 }

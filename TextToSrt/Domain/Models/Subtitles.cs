@@ -1,11 +1,11 @@
-﻿using SubtitlesConverter.Domain.TextProcessing;
+﻿using SubtitlesConverter.Domain.TextProcessing.Implementation;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace SubtitlesConverter.Domain
+namespace SubtitlesConverter.Domain.Models
 {
     class Subtitles : LinesTrimmer
     {

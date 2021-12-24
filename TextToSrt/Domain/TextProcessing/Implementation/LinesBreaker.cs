@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace SubtitlesConverter.Domain.TextProcessing
+namespace SubtitlesConverter.Domain.TextProcessing.Implementation
 {
     class LinesBreaker : ITextProcessor
     {

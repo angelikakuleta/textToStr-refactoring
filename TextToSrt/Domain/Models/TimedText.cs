@@ -1,9 +1,10 @@
-﻿using System;
+﻿using SubtitlesConverter.Domain.TextProcessing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SubtitlesConverter.Domain
+namespace SubtitlesConverter.Domain.Models
 {
     class TimedText
     {
@@ -19,6 +20,6 @@ namespace SubtitlesConverter.Domain
         }
 
         public TimedText Apply(ITextProcessor processor) =>
-            new TimedText(processor.Execute(this.Content), this.Duration);
+            new TimedText(processor.Execute(Content), Duration);
     }
 }

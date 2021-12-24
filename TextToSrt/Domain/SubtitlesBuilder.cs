@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SubtitlesConverter.Domain.Models;
 using SubtitlesConverter.Domain.TextProcessing;
+using System.Collections.Generic;
 
 namespace SubtitlesConverter.Domain
 {
