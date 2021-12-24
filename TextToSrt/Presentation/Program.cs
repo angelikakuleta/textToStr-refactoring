@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using SubtitlesConverter.Domain;
+using SubtitlesConverter.Domain.TextProcessing;
 
 namespace SubtitlesConverter.Presentation
 {
@@ -27,8 +28,14 @@ namespace SubtitlesConverter.Presentation
             {
                 string[] text = File.ReadAllLines(source.FullName);
                 TimedText timed = new TimedText(text, clipDuration); // wrapped objects that always appears together
-                Subtitles captions = Subtitles.Parse(timed);
-                captions.SaveAsStr(destination);
+                Subtitles subtitles = new SubtitlesBuilder()
+                    .For(timed)
+                    .Using(new LinesTrimmer())
+                    .Using(new SentencesBreaker())
+                    .Using(new LinesBreaker(95, 45))
+                    .Build();
+
+                subtitles.SaveAsStr(destination);
             }
             catch (Exception ex)
             {

@@ -20,3 +20,10 @@ Wraps a linear structure of objects of the same kind into a single object which 
 ## Decorator pattern
 
 One object wraps another object with the same interface. Intercepts calls to methods and adds own behavior.
+
+## Builder pattern
+
+Encapsulates the process of building a complex object. Consumer only declare intentions about the final product. Builder ensures that the product satisfies intentions. The whole process ends in calling the `Build` method.
+
+`Build` method should not have any arguments. The builder object is supposed to accumulate content through its lifetime and then to use that content when `Build` method is invoked.
+

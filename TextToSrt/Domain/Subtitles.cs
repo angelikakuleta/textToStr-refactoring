@@ -16,21 +16,6 @@ namespace SubtitlesConverter.Domain
             Lines = lines.ToList();
         }
 
-        public static Subtitles Parse(TimedText text)
-        {
-            ITextProcessor parsing = 
-                new LinesTrimmer()
-                    .Then(new SentencesBreaker())
-                    .Then(new LinesBreaker(95, 45));
-
-            TimedText processed = text.Apply(parsing);
-            
-            TextDurationMeter durationMeter = new TextDurationMeter(processed);
-
-            IEnumerable<SubtitleLine> subtitles = durationMeter.MeasureLines();
-            return new Subtitles(subtitles);
-        }
-
         public void SaveAsStr(FileInfo destination) =>
             File.WriteAllLines(destination.FullName, GenerateSrtFileContent(), Encoding.UTF8);
 

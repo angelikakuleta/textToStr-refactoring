@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SubtitlesConverter.Domain.TextProcessing
+namespace SubtitlesConverter.Domain
 {
     class DoNothing : ITextProcessor
     {
