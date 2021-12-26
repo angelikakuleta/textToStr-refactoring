@@ -31,3 +31,10 @@ Encapsulates the process of building a complex object. Consumer only declare int
 
 `Build` method should not have any arguments. The builder object is supposed to accumulate content through its lifetime and then to use that content when `Build` method is invoked.
 
+## *Inversion of Control principle
+
+Consumer of a feature is the one who defines the public interface of that feature. Any concrete impelmentation would  depend on the consumer. The concrete implementation can then be replaced without affecting the consumer. Concrete implementation of abstract interface must be injected into the consumer at run time. That is where [Dependency Injection](#dependency-injection-pattern) comes to the picture.
+
+## Dependency Injection pattern
+
+Using DI, we move the creation and binding of the dependent objects outside of the class that depends on them. Dependencies are injected into the consumer by another entity which is controlling the construction of the application's object graph at run time.

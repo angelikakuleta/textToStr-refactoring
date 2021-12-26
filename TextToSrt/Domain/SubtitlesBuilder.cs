@@ -1,17 +1,18 @@
 ﻿using SubtitlesConverter.Domain.Models;
 using SubtitlesConverter.Domain.TextProcessing;
+using SubtitlesConverter.Infrastructure.FileSystem;
 using System.Collections.Generic;
 
 namespace SubtitlesConverter.Domain
 {
     class SubtitlesBuilder
     {
-        private TimedText Text { get; set; } = TimedText.Empty;
+        private ITextReader Reader { get; set; } = TextReader.Empty;
         ITextProcessor Processing { get; set; } = new DoNothing();
 
-        public SubtitlesBuilder For(TimedText text)
+        public SubtitlesBuilder For(TextFileReader source)
         {
-            Text = text;
+            Reader = source;
             return this;
         }
 
@@ -23,7 +24,7 @@ namespace SubtitlesConverter.Domain
 
         public Subtitles Build()
         {
-            TimedText processed = Text.Apply(Processing);
+            TimedText processed = Reader.Read().Apply(Processing);
             TextDurationMeter durationMeter = new TextDurationMeter(processed);
             IEnumerable<SubtitleLine> subtitles = durationMeter.MeasureLines();
             return new Subtitles(subtitles);

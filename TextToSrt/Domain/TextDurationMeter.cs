@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace SubtitlesConverter.Domain
 {
-    internal class TextDurationMeter
+    class TextDurationMeter
     {
         private TimedText Text { get; }
 
