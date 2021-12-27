@@ -41,3 +41,6 @@ Using DI, we move the creation and binding of the dependent objects outside of t
 
 ## Rules pattern
 It helps to encapsulate each business rule in a separate object and decouple the definition of business rules from their processing logic (applying the [Single Responsibility principle]()). New rules can be added without the need to modify the rest of the application logic.
+
+## Adapter pattern
+Adapter wraps a rule of one kind ans turn it into a related rule of another kind.

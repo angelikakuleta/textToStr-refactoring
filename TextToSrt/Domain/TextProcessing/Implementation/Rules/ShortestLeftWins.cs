@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SubtitlesConverter.Domain.TextProcessing.Implementation
+namespace SubtitlesConverter.Domain.TextProcessing.Implementation.Rules
 {
     // Composite rule
     class ShortestLeftWins : ITwoWaySplitter
     {
         private IEnumerable<ITwoWaySplitter> Splitters { get; } // composition
-        
+
         public ShortestLeftWins(IEnumerable<ITwoWaySplitter> splitters)
         {
             Splitters = splitters;
