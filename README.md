@@ -38,3 +38,6 @@ Consumer of a feature is the one who defines the public interface of that featur
 ## Dependency Injection pattern
 
 Using DI, we move the creation and binding of the dependent objects outside of the class that depends on them. Dependencies are injected into the consumer by another entity which is controlling the construction of the application's object graph at run time.
+
+## Rules pattern
+It helps to encapsulate each business rule in a separate object and decouple the definition of business rules from their processing logic (applying the [Single Responsibility principle]()). New rules can be added without the need to modify the rest of the application logic.
