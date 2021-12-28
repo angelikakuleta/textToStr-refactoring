@@ -2,18 +2,17 @@
 
 namespace SubtitlesConverter.Domain.Models
 {
-    class SubtitleLine
+    public class SubtitleLine
     {
+        public TimeSpan BeginOffset { get; }
+        public TimeSpan EndOffset { get; }
         public string Content { get; }
-        public TimeSpan Duration { get; }
 
-        public SubtitleLine(string content, TimeSpan duration)
+        public SubtitleLine(TimeSpan beginOffset, TimeSpan endOffset, string content)
         {
-            Content = content.Trim();
-            Duration = duration;
+            BeginOffset = beginOffset;
+            EndOffset = endOffset;
+            Content = content ?? string.Empty;
         }
-
-        public override string ToString() =>
-            $"{Duration} --> {Content}";
     }
 }

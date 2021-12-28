@@ -3,7 +3,6 @@ using System.IO;
 using System.Reflection;
 using SubtitlesConverter.Domain;
 using SubtitlesConverter.Domain.Models;
-using SubtitlesConverter.Domain.TextProcessing;
 using SubtitlesConverter.Domain.TextProcessing.Implementation;
 using SubtitlesConverter.Infrastructure.FileSystem;
 
@@ -35,7 +34,9 @@ namespace SubtitlesConverter.Presentation
                     .Using(new LinesBreaker(95, 45))
                     .Build();
 
-                subtitles.SaveAsStr(new TextFileWriter(destination));
+                subtitles.Accept(
+                    new SubtitlesToStrWriter(
+                        new TextFileWriter(destination)));
             }
             catch (Exception ex)
             {

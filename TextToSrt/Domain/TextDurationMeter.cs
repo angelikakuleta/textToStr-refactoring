@@ -15,10 +15,10 @@ namespace SubtitlesConverter.Domain
             Text = text;
         }
 
-        public IEnumerable<SubtitleLine> MeasureLines() =>
+        public IEnumerable<TimedLine> MeasureLines() =>
             MeasureLines(GetFullTextWeight());
 
-        public IEnumerable<SubtitleLine> MeasureLines(double fullTextWeight) =>
+        public IEnumerable<TimedLine> MeasureLines(double fullTextWeight) =>
             Text.Content
                 .Select(line => (
                     line: line,
@@ -26,7 +26,7 @@ namespace SubtitlesConverter.Domain
                 .Select(tuple => (
                     line: tuple.line,
                     miliseconds: Text.Duration.TotalMilliseconds * tuple.relativeWeight))
-                .Select(tuple => new SubtitleLine(
+                .Select(tuple => new TimedLine(
                     tuple.line,
                     TimeSpan.FromMilliseconds(tuple.miliseconds)));
 

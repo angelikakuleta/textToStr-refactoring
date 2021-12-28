@@ -26,7 +26,7 @@ namespace SubtitlesConverter.Domain
         {
             TimedText processed = Reader.Read().Apply(Processing);
             TextDurationMeter durationMeter = new TextDurationMeter(processed);
-            IEnumerable<SubtitleLine> subtitles = durationMeter.MeasureLines();
+            IEnumerable<TimedLine> subtitles = durationMeter.MeasureLines();
             return new Subtitles(subtitles);
         }
     }

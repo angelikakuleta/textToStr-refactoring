@@ -44,3 +44,8 @@ It helps to encapsulate each business rule in a separate object and decouple the
 
 ## Adapter pattern
 Adapter wraps a rule of one kind ans turn it into a related rule of another kind.
+
+## Visitor pattern
+Can be used to extend a class with new behavior without changing these class alone. It pushes all behaviors that are not closely related to the model itself out into concrete visitor implementations. Each concrete visitor would impelment one concrete behavior. This pattern is useful when you wish to retain focus and simplicity of the domain class.
+
+Original Visitor pattern requires to have a class inheritance. Still, it can be applied to a composition of objects.

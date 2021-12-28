@@ -16,5 +16,8 @@ namespace SubtitlesConverter.Infrastructure.FileSystem
 
         public void Write(IEnumerable<string> lines) =>
             File.WriteAllLines(Destination.FullName, lines, Encoding.UTF8);
+
+        public void AppendLines(params string[] lines) =>
+            File.AppendAllLines(Destination.FullName, lines);
     }
 }
