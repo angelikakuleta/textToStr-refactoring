@@ -24,10 +24,18 @@ namespace SubtitlesConverter.Domain
 
         public Subtitles Build()
         {
-            TimedText processed = Reader.Read().Apply(Processing);
-            TextDurationMeter durationMeter = new TextDurationMeter(processed);
-            IEnumerable<TimedLine> subtitles = durationMeter.MeasureLines();
-            return new Subtitles(subtitles);
+            Subtitles subtitles = new Subtitles();
+
+            foreach(TimedText block in Reader.Read())
+            {
+                TimedText processed = block.Apply(Processing);
+                TextDurationMeter durationMeter = new TextDurationMeter(processed);
+                IEnumerable<TimedLine> lines = durationMeter.MeasureLines();
+                subtitles.Append(lines, block.Offset);
+
+            }
+
+            return subtitles;
         }
     }
 }

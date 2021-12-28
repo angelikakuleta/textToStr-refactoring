@@ -42,7 +42,7 @@ namespace SubtitlesConverter.Domain.TextProcessing.Implementation.Splitters
         private (string left, string right) Split(string line, int matchPos) =>
         (
             line.Substring(0, matchPos) + AppendLeft,
-            PrependRight + line.Substring(matchPos + Pattern.Length)
+            PrependRight + line[(matchPos + Pattern.Length)..]
         );
     }
 }

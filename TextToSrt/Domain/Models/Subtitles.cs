@@ -1,27 +1,29 @@
 ﻿using SubtitlesConverter.Domain.TextProcessing.Implementation;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SubtitlesConverter.Domain.Models
 {
     class Subtitles : LinesTrimmer
     {
-        private IEnumerable<TimedLine> Lines { get; }
+        private IList<SubtitleLine> Lines { get; } = new List<SubtitleLine>();
 
-        public Subtitles(IEnumerable<TimedLine> lines)
+        public void Append(IEnumerable<TimedLine> lines, TimeSpan offset)
         {
-            Lines = lines.ToList();
+            TimeSpan begin = offset;
+            foreach (TimedLine line in lines)
+            {
+                TimeSpan end = begin + line.Duration;
+                Lines.Add(new SubtitleLine(begin, end, line.Content));
+                begin = end;
+            }
         }
 
         public void Accept(ISubtitlesVisitor visitor)
         {
-            TimeSpan begin = new TimeSpan(0);
-            foreach (TimedLine line in Lines)
+            foreach (SubtitleLine line in Lines)
             {
-                TimeSpan end = begin + line.Duration;
-                visitor.Visit(new SubtitleLine(begin, end, line.Content));
-                begin = end;
+                visitor.Visit(line);
             }
         }
     }
