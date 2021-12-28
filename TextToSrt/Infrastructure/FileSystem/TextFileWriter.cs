@@ -12,6 +12,12 @@ namespace SubtitlesConverter.Infrastructure.FileSystem
         public TextFileWriter(FileInfo destination)
         {
             Destination = destination;
+            Truncate(destination);
+        }
+
+        private static void Truncate(FileInfo file)
+        {
+            using (File.Open(file.FullName, FileMode.Create)) { }
         }
 
         public void Write(IEnumerable<string> lines) =>
