@@ -1,103 +1,43 @@
-﻿using SubtitlesConverter.Common;
-using System.Collections.Generic;
+﻿using SubtitlesConverter.Domain.TextProcessing.Implementation.Splitters;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace SubtitlesConverter.Domain.TextProcessing.Implementation
 {
-    class LinesBreaker : ITextProcessor
+    class LinesBreaker : RuleBasedProcessor
     {
-        public int MaxLineLength { get; }
-        public int MinLengthBreakInto { get; }
+        protected override IMultiwaySplitter Splitter { get; }
 
-        public LinesBreaker(int maxLineLength, int minLengthBreakInto)
+        public LinesBreaker(int maxLineLength, int minLengthToBreakInto)
         {
-            MaxLineLength = maxLineLength;
-            MinLengthBreakInto = minLengthBreakInto;
+            this.Splitter =
+                new PassThroughSplitter()
+                    .WithLeftNotLongerThan(maxLineLength)
+                    .Append(
+                        WordBoundarySplitter.AtPunctuation(", ")
+                            .Append(WordBoundarySplitter.AtPunctuation("; "))
+                            .Append(WordBoundarySplitter.AtPunctuation(" - "))
+                            .WithLeftNotLongerThan(maxLineLength)
+                            .WithLeftNotShorterThan(minLengthToBreakInto)
+                            .WithLongestLeft())
+                    .Append(
+                        WordBoundarySplitter.BeforeWord(" and ")
+                            .Append(WordBoundarySplitter.BeforeWord(" or "))
+                            .WithLeftNotLongerThan(maxLineLength)
+                            .WithLeftNotShorterThan(minLengthToBreakInto)
+                            .WithLongestLeft())
+                    .Append(
+                        WordBoundarySplitter.BeforeWord(" to ")
+                            .Append(WordBoundarySplitter.BeforeWord(" then "))
+                            .WithLeftNotLongerThan(maxLineLength)
+                            .WithLeftNotShorterThan(minLengthToBreakInto)
+                            .WithLongestLeft())
+                    .Append(
+                        WordBoundarySplitter.AtPunctuation(" ")
+                            .WithLeftNotLongerThan(maxLineLength)
+                            .WithLeftNotShorterThan(minLengthToBreakInto)
+                            .WithLongestLeft())
+                    .FirstWins()
+                    .Repeat();
         }
-
-        private IEnumerable<(string separatorPattern, string appendLeft, string prependRight)[]>
-            Rules
-        { get; } = new[]
-        {
-            new[]
-            {
-                (", ", "...", "... "),
-                ("; ", "...", "... "),
-                (" - ", "...", "... "),
-            },
-            new[]
-            {
-                (" and ", "...", "... and "),
-                (" or ", "...", "... or "),
-            },
-            new[]
-            {
-                (" to ", "...", "... to "),
-                (" then ", "...", "... then "),
-            },
-            new[]
-            {
-                (" ", "...", "... ")
-            },
-        };
-
-        public IEnumerable<string> Execute(
-            IEnumerable<string> text) =>
-            text.SelectMany(line => BreakLongLine(line));
-
-        public IEnumerable<string> BreakLongLine(string line)
-        {
-            string remaining = line;
-
-            while (remaining.Length > 0)
-            {
-                if (remaining.Length <= MaxLineLength)
-                {
-                    yield return remaining;
-                    break;
-                }
-
-                bool broken = false;
-                foreach ((string separator, string toLeft, string toRight)[] rules in Rules)
-                {
-                    IEnumerable<(string left, string right)> split =
-                        TryBreakLongLine(remaining, rules)
-                            .ToList();
-
-                    if (split.Any())
-                    {
-                        (string left, string right) = split.First();
-                        yield return left;
-                        remaining = right;
-                        broken = true;
-                        break;
-                    }
-                }
-
-                if (!broken)
-                {
-                    yield return remaining;
-                    break;
-                }
-            }
-        }
-
-        private IEnumerable<(string left, string right)> TryBreakLongLine(
-            string line,
-            IEnumerable<(string separatorPattern, string appendLeft, string prependRight)> rules) =>
-            rules.SelectMany(rule => BreakLongLine(line, rule))
-                .WithMinimumOrEmpty(split => MaxLineLength - split.left.Length);
-
-        private IEnumerable<(string left, string right)> BreakLongLine(
-            string line,
-            (string separatorPattern, string appendLeft, string prependRight) rule) =>
-            new Regex(rule.separatorPattern).Matches(line)
-                .Select(match => (
-                    left: line.Substring(0, match.Index) + rule.appendLeft,
-                    right: rule.prependRight + line.Substring(match.Index + match.Length)))
-                .Where(split =>
-                    MinLengthBreakInto <= split.left.Length &&
-                    split.left.Length <= MaxLineLength);
     }
 }

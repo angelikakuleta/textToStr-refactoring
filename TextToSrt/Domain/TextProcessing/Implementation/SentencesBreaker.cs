@@ -1,4 +1,4 @@
-﻿using SubtitlesConverter.Domain.TextProcessing.Implementation.Rules;
+﻿using SubtitlesConverter.Domain.TextProcessing.Implementation.Splitters;
 
 namespace SubtitlesConverter.Domain.TextProcessing.Implementation
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SubtitlesConverter.Domain.TextProcessing.Implementation.Rules
+namespace SubtitlesConverter.Domain.TextProcessing.Implementation.Splitters
 {
     // Composite rule
     class ShortestLeftWins : ITwoWaySplitter

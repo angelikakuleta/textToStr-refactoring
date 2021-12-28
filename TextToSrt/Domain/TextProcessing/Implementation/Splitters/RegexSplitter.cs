@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
 
-namespace SubtitlesConverter.Domain.TextProcessing.Implementation.Rules
+namespace SubtitlesConverter.Domain.TextProcessing.Implementation.Splitters
 {
     class RegexSplitter : ITwoWaySplitter
     {
